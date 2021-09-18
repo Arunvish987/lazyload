@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Dropdown</title>
+</head>
+<body>
+    <div class="container" style="margin-top:50px">
+        <h2 class="text-center">Dropdown</h2>
+        <br><br>
+        <form action="" method='post' id='indexForm' data-courses-url="{% url 'ajax-load-word' %}">
+            {% csrf_token %}
+            <label>In Number</label>
+            <select name="number" id="number" class='form-control'>
+                <option value="">------Select Number------</option>
+                {% for i in numbers %}
+                    <option value="{{ i.id }}">{{ i.no }}</option>
+                {% endfor %}    
+            </select>
+            <br>
+            <label>In Words</label>
+            <select name="words" id="words" class='form-control'>
+
+            </select>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+<script>
+    $("#number").change(function () {
+        var url = $("#indexForm").attr("data-courses-url");    //get the url of 'load'
+        var numberId = $(this).val();             //get the selected number id from HTML input
+
+        $.ajax({                                    //initalize an AJAX request
+            url: url,                               //set the url of the request
+            data: {
+                'number': numberId                //add the number id to get paramater
+            },
+            success: function (data) {              //'data' is the return of the 'load' view function
+                $("#words").html(data);            //replace the contents of the load input with data table 
+            }
+        });
+    })
+</script>
+</body>
+</html>
